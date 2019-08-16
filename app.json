@@ -1,0 +1,8 @@
+{
+  "name": "Lite Chat App",
+  "description": "Chat App using Node Express and Socket.IO hosted in Heroku",
+  "repository": "https://github.com/heroku/node-js-getting-started",
+  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "keywords": ["node", "express", "socket.io", "heroku"],
+  "image": "heroku/nodejs"
+}

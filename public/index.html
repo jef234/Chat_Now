@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat App</title>
+</head>
+
+<body>
+    <h1>Chat App</h1>
+
+    <ul id="chat"></ul>
+
+    <input type="text" name="msg" id="msg">
+    <button id="send">Send</button>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(document).ready(function () {
+            var socket = io()
+
+            $("#send").click(function(){
+                socket.emit("client msg",$("#msg").val())
+                $("#msg").val("")
+            })
+
+            socket.on("server msg", function(msg){
+                $("#chat").append("<li>"+msg+"</li>")
+            })
+        })
+    </script>
+</body>
+
+</html>
