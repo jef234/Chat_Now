@@ -20,6 +20,8 @@ io.on("connection", function (socket) {
 });
 
 // app.use(express.static("public"));
+app.set('view engine', 'ejs')
+app.get('/', (req, res) => res.render('public/index'))
 
 server.listen(PORT, function () {
     console.log("Server started on PORT: " + PORT)
