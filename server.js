@@ -9,8 +9,8 @@ var http = require("http"),
 io.on("connection", function (socket) {
     console.log("A user is connected");
 
-    socket.on("client msg", function (msg) {
-        io.emit("server msg", msg)
+    socket.on("client msg", function (msg,userName) {
+        io.emit("server msg", msg, userName)
     })
 });
 

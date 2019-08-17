@@ -5,31 +5,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Chat App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Chat Now</title>
+    <style>
+        .jumbotron {
+            padding: 2rem 1rem !important;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Chat App</h1>
+    <!-- <h1>Chat Now</h1>-->
 
-    <ul id="chat"></ul>
+    <!-- <ul id="chat"></ul> -->
 
-    <input type="text" autocomplete="off" name="msg" id="msg">
-    <button id="send">Send</button>
+    <!-- <input type="text" autocomplete="off" name="msg" id="msg">
+    <button id="send">Send</button> -->
+
+    <div class="my-3 col-12 p-3 bg-white rounded shadow-sm">
+        <h1 class="text-center pb-2 mb-0">Welcome to Chat Now</h1>
+
+        <span id="chat"></span>
+
+        <div class="row text-muted mt-3 ml-1 container-fluid">
+            <textarea class="col-9 form-control form-control-lg" type="text" autocomplete="off" name="msg" id="msg" rows="2"></textarea>
+            <button class="col-3" id="send">Send</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="userNameModal" tabindex="-1" role="dialog" aria-labelledby="selectIDsModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="selectIDsModalTitle">Welcome to Chat Now</h2>
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+                </div>
+                <div class="modal-body">
+                    <h5>Enter your name to begin</h5>
+                    <textarea required class="form-control form-control-lg" type="text" autocomplete="off" id="txtUserName" rows="2"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" disabled="disabled" class="btn btn-info" id="btmUserName">Start</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="d-block text-right mt-3">
+        <a href="#">All suggestions</a>
+    </div> -->
+
+    <!-- Actual jumbotron -->
+    <!-- <div class="container">
+        <div class="jumbotron mt-3">
+            <h1>Bottom Navbar example</h1>
+            <p class="lead">This example is a quick exercise to illustrate how the bottom navbar works.</p>
+            <a class="btn btn-lg btn-primary" href="/docs/4.3/components/navbar/" role="button">View navbar docs »</a>
+        </div>
+    </div> -->
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script>
         $(document).ready(function () {
             var socket = io()
 
-            $("#send").click(function(){
-                socket.emit("client msg",$("#msg").val())
+            let currUserMsg = `<div class="media text-muted pt-3 border-bottom border-gray">
+                                    <div class="media-body pb-1">
+                                        <div class="text-right mr-3">
+                                            <strong class="text-gray-dark">Jeffrey</strong>
+                                        </div>
+                                        <div class="container mr-0">
+                                            <div class="jumbotron text-right mt-1">
+                                                <h5>Bottom Navbar example</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <svg class="bd-placeholder-img rounded" width="4rem" height="4rem" xmlns="http://www.w3.org/2000/svg"
+                                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#e9ecef"></rect>
+                                    </svg>
+                                </div>`,
+                curUserName = "";
+
+            $('#userNameModal').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+
+            $("#userNameModal").bind('input', function () {
+                if($("#txtUserName").val()){
+                    $('#btmUserName').attr("disabled", false);
+                } else {
+                    $('#btmUserName').attr("disabled", true);
+                }
+            });
+
+            $('#btmUserName').click(function () {
+                // if ($("#txtUserName").valid()) {
+                    curUserName = $("#txtUserName").val();
+                    $('#userNameModal').modal('hide');
+                // }
+            });
+
+            $("#send").click(function () {
+                socket.emit("client msg", $("#msg").val(), curUserName)
                 $("#msg").val("")
             })
 
-            socket.on("server msg", function(msg){
-                $("#chat").append("<li>"+msg+"</li>")
+            socket.on("server msg", function (msg, senderName) {
+                if (curUserName == senderName) {
+                    $("#chat").append(
+                        `<div class="media text-muted pt-3 border-bottom border-gray">
+                            <div class="media-body pb-1">
+                                <div class="text-right mr-3">
+                                    <strong class="text-gray-dark">`+ curUserName + `</strong>
+                                </div>
+                                <div class="container mr-0">
+                                    <div class="jumbotron text-right mt-1">
+                                        <h5>`+ msg + `</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <svg class="bd-placeholder-img rounded" width="4rem" height="4rem" xmlns="http://www.w3.org/2000/svg"
+                                preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#e9ecef"></rect>
+                            </svg>
+                        </div>`
+                    );
+                } else {
+                    $("#chat").append(`<div class="media text-muted pt-3 border-bottom border-gray">
+                                            <svg class="bd-placeholder-img rounded" width="4rem" height="4rem" xmlns="http://www.w3.org/2000/svg"
+                                                preserveAspectRatio="xMinYMin slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
+                                                <rect width="100%" height="100%" fill="#e9ecef"></rect>
+                                            </svg>
+                                            <div class="media-body pb-1">
+                                                <div class="text-left ml-3">
+                                                    <strong class="text-gray-dark">`+ senderName + `</strong>
+                                                </div>
+                                                <div class="container ml-0">
+                                                    <div class="jumbotron mt-1">
+                                                        <h5>`+ msg + `</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`);
+                }
+                // $("#chat").append("<li>" + msg + userMsg + "</li>" + currUserMsg)
             })
         })
     </script>
