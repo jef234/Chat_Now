@@ -1,29 +1,50 @@
-let http = require("http"),
-    PORT = process.env.PORT || 3000,
-    express = require("express"),
-    socketio = require("socket.io"),
-    app = express(),
-    server = http.createServer(app);
+// let http = require("http"),
+//     PORT = process.env.PORT || 3000,
+//     express = require("express"),
+//     socketio = require("socket.io"),
+//     app = express(),
+//     server = http.createServer(app);
 
-server.use(express.static(path.join(__dirname, 'public')));
-server.set('views', path.join(__dirname, 'views'));
+// server.use(express.static(path.join(__dirname, 'public')));
+// server.set('views', path.join(__dirname, 'views'));
 
-let io = socketio(server);
+// let io = socketio(server);
 
-io.on("connection", function (socket) {
-    console.log("A user is connected");
+// io.on("connection", function (socket) {
+//     console.log("A user is connected");
 
-    socket.on("client msg", function (msg) {
-        // console.log(msg)
-        io.emit("server msg", msg)
-    })
+//     socket.on("client msg", function (msg) {
+//         // console.log(msg)
+//         io.emit("server msg", msg)
+//     })
+// });
+
+// // app.use(express.static("public"));
+// // server.set('view engine', 'ejs')
+// // server.get('/', (req, res) => res.render('/public/index'))
+// server.get('/', (req, res) => res.sendFile(__dirname,'/public/index.html'))
+
+// server.listen(PORT, function () {
+//     console.log("Server started on PORT: " + PORT)
+// });
+
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var port = process.env.PORT || 3000;
+
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
 });
 
-// app.use(express.static("public"));
-// server.set('view engine', 'ejs')
-// server.get('/', (req, res) => res.render('/public/index'))
-server.get('/', (req, res) => res.sendFile(__dirname,'/public/index.html'))
+io.on('connection', function(socket){
+    console.log("A user is connected");
 
-server.listen(PORT, function () {
-    console.log("Server started on PORT: " + PORT)
+  socket.on('client msg', function(msg){
+    io.emit('server msg', msg);
+  });
+});
+
+http.listen(port, function(){
+  console.log('listening on *:' + port);
 });
