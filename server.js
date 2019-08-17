@@ -19,7 +19,7 @@ io.on("connection", function (socket) {
     })
 });
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 server.listen(PORT, function () {
     console.log("Server started on PORT: " + PORT)
