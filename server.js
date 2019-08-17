@@ -3,7 +3,7 @@ let http = require("http"),
     express = require("express"),
     socketio = require("socket.io"),
     app = express(),
-    server = http.createServer(app),
+    server = http.Server(app),
     io = socketio(server);
 
 // server.use(express.static(path.join(__dirname, 'public')));
