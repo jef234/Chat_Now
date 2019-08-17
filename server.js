@@ -22,7 +22,7 @@ io.on("connection", function (socket) {
 // app.use(express.static("public"));
 // server.set('view engine', 'ejs')
 // server.get('/', (req, res) => res.render('/public/index'))
-app.get('/', (req, res) => res.sendFile(__dirname,'/public/index.html'))
+server.get('/', (req, res) => res.sendFile(__dirname,'/public/index.html'))
 
 server.listen(PORT, function () {
     console.log("Server started on PORT: " + PORT)
