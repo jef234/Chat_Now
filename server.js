@@ -1,4 +1,4 @@
-let http = require("http"),
+var http = require("http"),
     PORT = process.env.PORT || 3000,
     express = require("express"),
     socketio = require("socket.io"),
@@ -20,7 +20,7 @@ io.on("connection", function (socket) {
 // app.use(express.static("public"));
 // server.set('view engine', 'ejs')
 // server.get('/', (req, res) => res.render('/public/index'))
-server.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'))
+app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'))
 
 server.listen(PORT, function () {
     console.log("Server started on PORT: " + PORT)
