@@ -6,9 +6,6 @@ var http = require("http"),
     server = http.Server(app),
     io = socketio(server);
 
-// server.use(express.static(path.join(__dirname, 'public')));
-// server.set('views', path.join(__dirname, 'views'));
-
 io.on("connection", function (socket) {
     console.log("A user is connected");
 
@@ -17,9 +14,6 @@ io.on("connection", function (socket) {
     })
 });
 
-// app.use(express.static("public"));
-// server.set('view engine', 'ejs')
-// server.get('/', (req, res) => res.render('/public/index'))
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'))
 
 server.listen(PORT, function () {
