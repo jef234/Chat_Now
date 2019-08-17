@@ -30,7 +30,7 @@
 
         <div class="row text-muted mt-3 ml-1 container-fluid">
             <textarea class="col-9 form-control form-control-lg" type="text" autocomplete="off" name="msg" id="msg" rows="2"></textarea>
-            <button class="col-3" id="send">Send</button>
+            <button class="col-3" disabled="disabled" id="send">Send</button>
         </div>
     </div>
 
@@ -115,6 +115,14 @@
                 }
             });
 
+            $("#msg").bind('input', function () {
+                if($("#msg").val()){
+                    $('#send').attr("disabled", false);
+                } else {
+                    $('#send').attr("disabled", true);
+                }
+            });
+
             $('#btmUserName').click(function () {
                 // if ($("#txtUserName").valid()) {
                     curUserName = $("#txtUserName").val();
@@ -124,7 +132,8 @@
 
             $("#send").click(function () {
                 socket.emit("client msg", $("#msg").val(), curUserName)
-                $("#msg").val("")
+                $("#msg").val("");
+                $("html, body").animate({ scrollTop: $(document).height()+$(window).height() });
             })
 
             socket.on("server msg", function (msg, senderName) {
