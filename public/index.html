@@ -30,7 +30,7 @@
 
         <div class="row text-muted mt-3 ml-1 container-fluid">
             <textarea class="col-9 form-control form-control-lg" type="text" autocomplete="off" name="msg" id="msg" rows="2"></textarea>
-            <button class="col-3" disabled="disabled" id="send">Send</button>
+            <button disabled="disabled" class="col-3" id="send">Send</button>
         </div>
     </div>
 
@@ -50,7 +50,7 @@
                     <textarea required class="form-control form-control-lg" type="text" autocomplete="off" id="txtUserName" rows="2"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" disabled="disabled" class="btn btn-info" id="btmUserName">Start</button>
+                    <button disabled="disabled" type="button" class="btn btn-info" id="btmUserName">Start</button>
                 </div>
             </div>
         </div>
@@ -80,26 +80,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script>
         $(document).ready(function () {
-            var socket = io()
-
-            let currUserMsg = `<div class="media text-muted pt-3 border-bottom border-gray">
-                                    <div class="media-body pb-1">
-                                        <div class="text-right mr-3">
-                                            <strong class="text-gray-dark">Jeffrey</strong>
-                                        </div>
-                                        <div class="container mr-0">
-                                            <div class="jumbotron text-right mt-1">
-                                                <h5>Bottom Navbar example</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <svg class="bd-placeholder-img rounded" width="4rem" height="4rem" xmlns="http://www.w3.org/2000/svg"
-                                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32">
-                                        <title>Placeholder</title>
-                                        <rect width="100%" height="100%" fill="#e9ecef"></rect>
-                                    </svg>
-                                </div>`,
-                curUserName = "";
+            var socket = io();
+            let curUserName = "";
 
             $('#userNameModal').modal({
                 backdrop: 'static',
@@ -124,15 +106,17 @@
             });
 
             $('#btmUserName').click(function () {
-                // if ($("#txtUserName").valid()) {
+                if ($("#txtUserName").val()) {
                     curUserName = $("#txtUserName").val();
+                    $("#txtUserName").val("");
                     $('#userNameModal').modal('hide');
-                // }
+                }
             });
 
             $("#send").click(function () {
                 socket.emit("client msg", $("#msg").val(), curUserName)
                 $("#msg").val("");
+                $('#send').attr("disabled", true);
                 $("html, body").animate({ scrollTop: $(document).height()+$(window).height() });
             })
 
