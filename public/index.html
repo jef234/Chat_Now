@@ -16,14 +16,14 @@
 </head>
 
 <body>
+
     <div class="my-3 col-12 p-3 bg-white rounded shadow-sm">
         <h1 class="text-center pb-2 mb-0">Welcome to Chat Now</h1>
 
         <span id="chat"></span>
 
         <div class="row text-muted mt-3 ml-1 container-fluid">
-            <textarea class="col-9 form-control form-control-lg" type="text" autocomplete="off" name="msg" id="msg"
-                rows="2"></textarea>
+            <textarea class="col-9 form-control form-control-lg" type="text" autocomplete="off" name="msg" id="msg" rows="2"></textarea>
             <button disabled="disabled" class="col-3" id="send">Send</button>
         </div>
     </div>
@@ -35,12 +35,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="selectIDsModalTitle">Welcome to Chat Now</h2>
-                    </button> -->
                 </div>
                 <div class="modal-body">
                     <h5>Enter your name to begin</h5>
-                    <textarea required class="form-control form-control-lg" type="text" autocomplete="off"
-                        id="txtUserName" rows="2"></textarea>
+                    <textarea required class="form-control form-control-lg" type="text" autocomplete="off" id="txtUserName" rows="2"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button disabled="disabled" type="button" class="btn btn-info" id="btmUserName">Start</button>
@@ -70,7 +68,7 @@
             });
 
             $("#userNameModal").bind('input', function () {
-                if ($("#txtUserName").val()) {
+                if($("#txtUserName").val()){
                     $('#btmUserName').attr("disabled", false);
                 } else {
                     $('#btmUserName').attr("disabled", true);
@@ -78,7 +76,7 @@
             });
 
             $("#msg").bind('input', function () {
-                if ($("#msg").val()) {
+                if($("#msg").val()){
                     $('#send').attr("disabled", false);
                 } else {
                     $('#send').attr("disabled", true);
@@ -97,7 +95,7 @@
                 socket.emit("client msg", $("#msg").val(), curUserName)
                 $("#msg").val("");
                 $('#send').attr("disabled", true);
-                $("html, body").animate({ scrollTop: $(document).height() + $(window).height() });
+                $("html, body").animate({ scrollTop: $(document).height()+$(window).height() });
             })
 
             socket.on("server msg", function (msg, senderName) {
